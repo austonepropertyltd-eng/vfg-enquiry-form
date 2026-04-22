@@ -1182,11 +1182,63 @@
   }
 
   function submitForm() {
-    const agreed = document.getElementById('agreeTerms').checked;
-    const tErr = document.getElementById('e-terms');
-    if (!agreed) { tErr.classList.add('show'); return; }
-    tErr.classList.remove('show');
+  const agreed = document.getElementById('agreeTerms').checked;
+  const tErr = document.getElementById('e-terms');
 
+  if (!agreed) {
+    tErr.classList.add('show');
+    return;
+  }
+  tErr.classList.remove('show');
+
+  const allDataObject = {
+    firstName: val('firstName'),
+    lastName: val('lastName'),
+    email: val('email'),
+    phone: val('phone'),
+    whatsapp: val('whatsapp'),
+    role: val('role'),
+    company: val('company'),
+    country: val('country'),
+    state: val('state'),
+    businessStage: getRadio('bizStage'),
+    agentCount: val('agentCount'),
+    ticketVolume: val('ticketVol'),
+    launchDate: val('launchDate'),
+    games: getChecked('games').split(', '),
+    channels: getChecked('channels').split(', '),
+    features: getChecked('features').split(', '),
+    posDevice: getRadio('posDevice'),
+    budget: document.getElementById('budgetDisplay').textContent,
+    timeline: getRadio('timeline'),
+    paymentPreference: getRadio('payPref'),
+    branding: getRadio('branding'),
+    referral: val('referral'),
+    additionalNotes: val('additionalNotes'),
+    product: "PoolsMaxPro"
+  };
+
+ fetch("https://vfg-insight-hub.lovable.app/functions/v1/submit-enquiry", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(allDataObject)
+})
+.then(res => res.json())
+.then(data => {
+  console.log("SUCCESS:", data);
+
+  document.getElementById('refCode').textContent = data.referenceCode;
+
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+})
+.catch(err => {
+  console.error("ERROR:", err);
+  alert("Submission failed. Check connection.");
+});
+}
     // Generate ref
     const ref = 'VFG-' + Math.random().toString(36).substr(2,6).toUpperCase();
     document.getElementById('refCode').textContent = ref;
