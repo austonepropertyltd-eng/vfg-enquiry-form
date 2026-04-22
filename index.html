@@ -1218,6 +1218,25 @@
     product: "PoolsMaxPro"
   };
 
+  fetch("https://vfg-insight-hub.lovable.app/functions/v1/submit-enquiry", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(allDataObject)
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('refCode').textContent = data.referenceCode;
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Submission failed");
+  });
+}
+
  fetch("https://vfg-insight-hub.lovable.app/functions/v1/submit-enquiry", {
   method: "POST",
   headers: {
